@@ -1,28 +1,24 @@
-import asyncio
+from contextlib import asynccontextmanager
 
-from pyrogram import Client, filters, idle
-from pyrogram.types import Message
+from pyrogram import Client
+from fastapi import FastAPI
 
-
-app = Client("myapp")
-
-@app.on_message(filters.text & filters.private & filters.me)
-async def echo(client: Client, message: Message):
-    await message.forward("me")
-
-async def main():
-    await app.start()
-
-    async for message in app.get_chat_members(TARGET_CHANNEL):
-        message: Message
-        print(message.text)
-
-    await idle()
-
-    await app.stop()
-
-if __name__ == "__main__":
-    asyncio.run(main())
+from backend.app.core.config import config
 
 
+bot = Client(
+    "silk_fetch",
+    api_id=config.telegram_api_id,
+    api_hash=config.telegram_api_hash,
+    plugins=dict(root="backend/app/ingestion")
+)
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await bot.start()
+
+    yield {"tg_bot": bot}
+
+    await bot.stop()
+
+app = FastAPI(lifespan=lifespan)

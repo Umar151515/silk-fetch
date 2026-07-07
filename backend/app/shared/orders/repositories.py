@@ -59,7 +59,7 @@ class OrderRepository:
                 OrderDispatch.date_dispatch,
             ],
             set_={
-                "client_code": stmt.excluded.client_code
+                OrderDispatch.client_code: stmt.excluded.client_code
             }
         ) 
 
