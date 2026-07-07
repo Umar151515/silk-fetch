@@ -1,0 +1,11 @@
+.vscode/
+
+#python
+
+.env
+venv/
+__pycache__/
+*.session
+
+#flutter
+
