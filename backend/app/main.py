@@ -4,6 +4,7 @@ from pyrogram import Client
 from fastapi import FastAPI
 
 from backend.app.core.config import config
+from backend.app.api import router
 
 
 bot = Client(
@@ -22,3 +23,4 @@ async def lifespan(app: FastAPI):
     await bot.stop()
 
 app = FastAPI(lifespan=lifespan)
+app.include_router(router)
