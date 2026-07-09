@@ -5,6 +5,7 @@ class Config(BaseSettings):
     telegram_api_id: int
     telegram_api_hash: str
     database_url: str
+    test_database_url: str
     
     target_channel: str = "silkroadcargo"
     debug: bool = True
