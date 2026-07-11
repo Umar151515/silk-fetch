@@ -3,7 +3,7 @@
 #python
 
 .env
-venv/
+.venv/
 __pycache__/
 *.session
 
