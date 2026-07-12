@@ -9,7 +9,11 @@ dependencies = [
     "psycopg[binary]>=3.3.4",
     "pydantic-settings>=2.14.2",
     "pyrogram>=2.0.106",
+    "sqlalchemy>=2.0.51",
+]
+
+[dependency-groups]
+dev = [
     "pytest>=9.1.1",
     "pytest-asyncio>=1.4.0",
-    "sqlalchemy>=2.0.51",
 ]

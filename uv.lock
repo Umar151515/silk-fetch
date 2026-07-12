@@ -320,9 +320,13 @@ dependencies = [
     { name = "psycopg", extra = ["binary"] },
     { name = "pydantic-settings" },
     { name = "pyrogram" },
+    { name = "sqlalchemy" },
+]
+
+[package.dev-dependencies]
+dev = [
     { name = "pytest" },
     { name = "pytest-asyncio" },
-    { name = "sqlalchemy" },
 ]
 
 [package.metadata]
@@ -331,9 +335,13 @@ requires-dist = [
     { name = "psycopg", extras = ["binary"], specifier = ">=3.3.4" },
     { name = "pydantic-settings", specifier = ">=2.14.2" },
     { name = "pyrogram", specifier = ">=2.0.106" },
+    { name = "sqlalchemy", specifier = ">=2.0.51" },
+]
+
+[package.metadata.requires-dev]
+dev = [
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "pytest-asyncio", specifier = ">=1.4.0" },
-    { name = "sqlalchemy", specifier = ">=2.0.51" },
 ]
 
 [[package]]
