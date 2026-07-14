@@ -5,7 +5,6 @@ from typing import AsyncGenerator
 from backend.src.core.database import Base
 from backend.src.core.config import config
 
-
 @pytest.fixture(scope="session")
 async def test_engine() -> AsyncGenerator[AsyncEngine, None]:
     engine = create_async_engine(config.test_database_url, echo=config.debug)
