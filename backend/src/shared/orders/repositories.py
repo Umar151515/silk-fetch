@@ -37,15 +37,15 @@ class OrderRepository:
 
         return result.scalar_one_or_none()
 
-    async def delete_dispatch_by_details(self, track_number: str, date_dispatch: date) -> OrderDispatch | None:
-        stmt = delete(OrderDispatch).where(
-            OrderDispatch.track_number == track_number,
-            OrderDispatch.date_dispatch == date_dispatch
-        ).returning(OrderDispatch)
+    async def delete_dispatch_by_details(self, **kwargs: Unpack[OrderDispatchArgs]) -> int:
+        if not kwargs:
+            return 0
+
+        stmt = delete(OrderDispatch).filter_by(**kwargs)
         result = await self.session.execute(stmt)
         await self.session.flush()
 
-        return result.scalar_one_or_none()
+        return result.rowcount
     
     async def upsert_dispatches(self, data: list[OrderDispatchArgs]) -> None:
         if not data:
@@ -69,21 +69,15 @@ class OrderRepository:
     async def get_dispatch_by_id(self, dispatch_id: int) -> OrderDispatch | None:
         return await self.session.get(OrderDispatch, dispatch_id)
 
-    async def get_dispatch_by_details(self, track_number: str, date_dispatch: date) -> OrderDispatch | None:
-        stmt = select(OrderDispatch).where(
-            OrderDispatch.track_number == track_number,
-            OrderDispatch.date_dispatch == date_dispatch
-        )
-        return await self.session.scalar(stmt)
-    
-    async def get_dispatches_by_track(self, track_number: str, client_code: str | None = None) -> list[OrderDispatch]:
-        stmt = select(OrderDispatch).where(
-            OrderDispatch.track_number == track_number, 
-        )
-        
-        if client_code is not None:
-            stmt = stmt.where(OrderDispatch.client_code == client_code)
-        
+    async def get_dispatch_by_details(
+            self, 
+            offset: int | None = None,
+            limit: int | None = None, 
+            **kwargs: Unpack[OrderDispatchArgs]
+        ) -> list[OrderDispatch]:
+
+        stmt = select(OrderDispatch).filter_by(**kwargs).offset(offset).limit(limit)
+
         result = await self.session.scalars(stmt)
         return result.all()
 
@@ -108,26 +102,21 @@ class OrderRepository:
 
     async def update_dispatch_by_details(
             self,
-            track_number: str,
-            date_dispatch: date,
+            update_data: OrderDispatchArgs,
             **kwargs: Unpack[OrderDispatchArgs]
-        ) -> OrderDispatch | None:
-        if not kwargs:
-            return None
-
+        ) -> int:
+        if not update_data:
+            return 0
+        
         stmt = (
             update(OrderDispatch)
-            .where(
-                OrderDispatch.track_number == track_number,
-                OrderDispatch.date_dispatch == date_dispatch
-            )
-            .values(**kwargs)
-            .returning(OrderDispatch)
+            .filter_by(**kwargs)
+            .values(**update_data)
         )
         result = await self.session.execute(stmt)
         await self.session.flush()
 
-        return result.scalar_one_or_none()
+        return result.rowcount
 
 def get_order_repository(
         session: AsyncSession = Depends(get_db_session)
