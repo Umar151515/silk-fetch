@@ -1,1 +1,1 @@
-from backend.app.api.v1.router import router
+from backend.src.api.v1.router import router
