@@ -37,7 +37,7 @@ class OrderRepository:
 
         return result.scalar_one_or_none()
 
-    async def delete_dispatch_by_details(self, **kwargs: Unpack[OrderDispatchArgs]) -> int:
+    async def delete_dispatches_by_details(self, **kwargs: Unpack[OrderDispatchArgs]) -> int:
         if not kwargs:
             return 0
 
@@ -69,7 +69,7 @@ class OrderRepository:
     async def get_dispatch_by_id(self, dispatch_id: int) -> OrderDispatch | None:
         return await self.session.get(OrderDispatch, dispatch_id)
 
-    async def get_dispatch_by_details(
+    async def get_dispatches_by_details(
             self, 
             offset: int | None = None,
             limit: int | None = None, 
@@ -100,7 +100,7 @@ class OrderRepository:
 
         return result.scalar_one_or_none()
 
-    async def update_dispatch_by_details(
+    async def update_dispatches_by_details(
             self,
             update_data: OrderDispatchArgs,
             **kwargs: Unpack[OrderDispatchArgs]
