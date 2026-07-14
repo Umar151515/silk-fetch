@@ -3,8 +3,8 @@ from contextlib import asynccontextmanager
 from pyrogram import Client
 from fastapi import FastAPI
 
-from backend.app.core.config import config
-from backend.app.api import router
+from backend.src.core.config import config
+from backend.src.api import router
 
 
 bot = Client(

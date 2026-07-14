@@ -4,7 +4,7 @@ from datetime import date
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
-from backend.app.core.database import Base
+from backend.src.core.database import Base
 
 
 class OrderDispatch(Base):
