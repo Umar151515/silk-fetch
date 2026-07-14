@@ -5,6 +5,7 @@ from typing import AsyncGenerator
 from backend.src.core.database import Base
 from backend.src.core.config import config
 
+
 @pytest.fixture(scope="session")
 async def test_engine() -> AsyncGenerator[AsyncEngine, None]:
     engine = create_async_engine(config.test_database_url, echo=config.debug)
@@ -28,7 +29,10 @@ async def db_session(test_engine: AsyncEngine) -> AsyncGenerator[AsyncSession, N
     async with test_engine.connect() as connection:
         transaction = await connection.begin()
 
-        async with TestingSessionLocal(bind=connection) as session:
+        async with TestingSessionLocal(
+            bind=connection,
+            join_transaction_mode="create_savepoint",
+        ) as session:
             yield session
 
         await transaction.rollback()
