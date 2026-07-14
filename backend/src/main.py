@@ -11,7 +11,7 @@ bot = Client(
     "silk_fetch",
     api_id=config.telegram_api_id,
     api_hash=config.telegram_api_hash,
-    plugins=dict(root="backend/app/ingestion")
+    plugins=dict(root="backend/src/ingestion")
 )
 
 @asynccontextmanager
