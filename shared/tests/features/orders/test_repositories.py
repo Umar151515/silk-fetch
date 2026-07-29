@@ -5,8 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 import pytest
 
-from backend.src.shared.orders.models import OrderDispatch
-from backend.src.shared.orders.repositories import OrderRepository, OrderDispatchArgs
+from shared.features.orders.models import OrderDispatch
+from shared.features.orders.repositories import OrderRepository, OrderDispatchArgs
 
 
 async def test_add_dispatch_success(db_session: AsyncSession):

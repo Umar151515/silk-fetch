@@ -17,7 +17,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --no-dev \
     --no-install-project
 
-COPY ./backend .
+COPY ./backend ./backend
+COPY ./shared ./shared
 
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync \
@@ -45,7 +46,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --frozen \
     --no-install-project
 
-COPY ./backend .
+COPY ./backend ./backend
+COPY ./shared ./shared
 
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync \

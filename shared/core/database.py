@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import DeclarativeBase
 
-from backend.src.core.config import config
+from shared.core.config import config
 
 
 engine = create_async_engine(

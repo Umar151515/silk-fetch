@@ -1,1 +1,0 @@
-from backend.src.api.router import router

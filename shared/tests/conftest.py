@@ -2,8 +2,8 @@ import pytest
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession, AsyncEngine
 from typing import AsyncGenerator
 
-from backend.src.core.database import Base
-from backend.src.core.config import config
+from shared.core.database import Base
+from shared.core.config import config
 
 
 @pytest.fixture(scope="session")

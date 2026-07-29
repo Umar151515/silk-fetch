@@ -6,8 +6,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.dialects.postgresql import insert
 from fastapi import Depends
 
-from backend.src.core.dependencies import get_db_session
-from backend.src.shared.orders.models import OrderDispatch, OrderDispatchArgs
+from shared.core.dependencies import get_db_session
+from shared.features.orders.models import OrderDispatch, OrderDispatchArgs
 
 
 class OrderRepository:
