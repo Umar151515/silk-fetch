@@ -1,14 +1,36 @@
 services:
+    redis:
+        image: redis:7-alpine
+        container_name: silk-fetch-redis
+        restart: unless-stopped
+
+        ports:
+            - "6379:6379"
+
+        volumes:
+            - redis_data:/data
+
+        networks:
+            - silk-network
+
+        healthcheck:
+            test: "redis-cli -a ${REDIS_PASSWORD} ping"
+            interval: 5s
+            timeout: 5s
+            retries: 5
+            start_period: 10s
+        
+        command: redis-server --requirepass ${REDIS_PASSWORD} --appendonly yes
     db:
         image: postgres:18-alpine
         container_name: silk-fetch-db
         restart: unless-stopped
 
         environment:
-            POSTGRES_USER: silk_user
-            POSTGRES_PASSWORD: silk_pass
-            POSTGRES_DB: silk_fetch
-            PGUSER: silk_user
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_DB: ${DB_NAME}
+            PGUSER: ${DB_USER}
 
         ports:
             - "5432:5432"
@@ -17,7 +39,7 @@ services:
             - silk_postgres_data:/var/lib/postgresql/data
 
         healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U silk_user -d silk_fetch"]
+            test: "pg_isready -U ${DB_USER} -d ${DB_NAME}"
             interval: 5s
             timeout: 5s
             retries: 5
@@ -32,12 +54,6 @@ services:
             dockerfile: backend/Dockerfile
         container_name: silk-fetch-backend
         restart: unless-stopped
-
-        environment:
-            DATABASE_URL: ${DATABASE_URL}
-            TEST_DATABASE_URL: ${TEST_DATABASE_URL}
-            TELEGRAM_API_ID: ${TELEGRAM_API_ID}
-            TELEGRAM_API_HASH: ${TELEGRAM_API_HASH}
         
         ports:
             - "8000:8000"
@@ -45,15 +61,19 @@ services:
         depends_on:
             db:
                 condition: service_healthy
-
-        env_file:
-            - .env
+            redis:
+                condition: service_healthy
 
         networks:
             - silk-network
+            
+        env_file:
+          - .env
 
 volumes:
   silk_postgres_data:
+    driver: local
+  redis_data:
     driver: local
 
 networks:
