@@ -35,8 +35,7 @@ ENV PATH="/app/.venv/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
-CMD ["python", "-m", "ingestion/main.py"]
-
+CMD ["faststream", "run", "ingestion.main:faststream_app"]
 
 
 FROM uv-base AS development-builder
@@ -61,4 +60,4 @@ COPY --from=development-builder /app /app
 
 ENV PATH="/app/.venv/bin:$PATH"
 
-CMD ["python", "-m", "ingestion/main.py"]
+CMD ["faststream", "run", "ingestion.main:faststream_app", "--reload"]
