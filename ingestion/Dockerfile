@@ -17,7 +17,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --no-dev \
     --no-install-project
 
-COPY ./backend ./backend
+COPY ./ingestion ./ingestion
 COPY ./shared ./shared
 
 RUN --mount=type=cache,target=/root/.cache/uv \
@@ -35,7 +35,7 @@ ENV PATH="/app/.venv/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
-CMD ["fastapi", "run", "backend/main.py", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "-m", "ingestion/main.py"]
 
 
 
@@ -46,7 +46,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --frozen \
     --no-install-project
 
-COPY ./backend ./backend
+COPY ./ingestion ./ingestion
 COPY ./shared ./shared
 
 RUN --mount=type=cache,target=/root/.cache/uv \
@@ -61,4 +61,4 @@ COPY --from=development-builder /app /app
 
 ENV PATH="/app/.venv/bin:$PATH"
 
-CMD ["fastapi", "dev", "run", "backend/main.py", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "-m", "ingestion/main.py"]
