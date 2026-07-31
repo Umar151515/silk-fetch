@@ -1,6 +1,7 @@
 import pytest
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession, AsyncEngine
 from typing import AsyncGenerator
+from redis.asyncio import Redis
 
 from shared.core.database import Base
 from shared.core.config import config
@@ -36,3 +37,16 @@ async def db_session(test_engine: AsyncEngine) -> AsyncGenerator[AsyncSession, N
             yield session
 
         await transaction.rollback()
+
+@pytest.fixture
+async def redis_client() -> AsyncGenerator[Redis, None]:
+    redis_client = Redis.from_url(
+        config.test_redis_url,
+        encoding="utf-8",
+        decode_responses=True
+    )
+    await redis_client.flushall()
+
+    yield redis_client
+
+    await redis_client.aclose()
